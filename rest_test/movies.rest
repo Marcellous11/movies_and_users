@@ -10,7 +10,7 @@ POST http://localhost:8000/movies
 content-type: application/json
 
 {
-  "title": "A Movie About Marcellous",
+  "title": "",
   "director": "Guy Richie",
   "releaseYear":34,
   "genre": "Sci-Fi",

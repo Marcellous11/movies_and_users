@@ -1,4 +1,5 @@
 import { Router } from "express";
+import {validate,movieValidationRules} from './validator.js'
 import {
   getAllMovies,
   getOneMovie,
@@ -11,8 +12,8 @@ const movieRoutes = Router();
 
 movieRoutes.get("/", getAllMovies);
 movieRoutes.get("/:id", getOneMovie);
-movieRoutes.post("/", addMovie);
-movieRoutes.put("/:id", editMovie);
+movieRoutes.post("/", movieValidationRules(),validate,addMovie);
+movieRoutes.put("/:id",movieValidationRules(),validate, editMovie);
 movieRoutes.delete("/:id", deleteMovie);
 
 export { movieRoutes };
