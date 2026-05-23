@@ -5,8 +5,8 @@ const doc = {
         title : "Small Movie API",
         description: "Small collection of movies managed by a smaller number of people"
     },
-    host: "localhost:8000",
-    schemes: ["http"]
+    host: "https://movies-and-users-api.onrender.com",
+    schemes: ["https"]
 }
 
 const outFile= "./swagger.json"
