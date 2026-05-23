@@ -1,0 +1,40 @@
+### Get all movie
+GET http://localhost:8000/movies
+
+### Get one movie
+GET http://localhost:8000/movies/6a10dd79859efec12c5d46b8 
+
+
+### Add a movie
+POST http://localhost:8000/movies
+content-type: application/json
+
+{
+  "title": "A Movie About Marcellous",
+  "director": "Guy Richie",
+  "releaseYear":34,
+  "genre": "Sci-Fi",
+  "runtimeMinutes": 142,
+  "rating": "PG-13",
+  "imdbScore": 8.7,
+  "inTheaters": true
+}
+
+
+### Edit a movie
+PUT http://localhost:8000/movies/6a11cda6b925f085e6ed24d6
+content-type: application/json
+
+{
+  "title": "Was a movie about marcellous",
+  "director": "Ava Castellanos",
+  "releaseYear": 2019,
+  "genre": "Sci-Fi",
+  "runtimeMinutes": 142,
+  "rating": "PG-13",
+  "imdbScore": 8.8,
+  "inTheaters": true
+}
+
+### Edit a movie
+DELETE http://localhost:8000/movies/6a11cda6b925f085e6ed24d6
