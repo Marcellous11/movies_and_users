@@ -5,7 +5,7 @@ const doc = {
         title : "Small Movie API",
         description: "Small collection of movies managed by a smaller number of people"
     },
-    host: "https://movies-and-users-api.onrender.com",
+    host: "movies-and-users-api.onrender.com",
     schemes: ["https"]
 }
 
