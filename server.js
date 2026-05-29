@@ -49,12 +49,12 @@ function(accessToken,refreshToken,profile,done){
 passport.serializeUser((user,done)=>{
     done(null,user)
 })
-passport.deserializeUser(()=>{
+passport.deserializeUser((user,done)=>{
     done(null,user)   
 })
 
 app.get("/",(req,res) => {
-    res.send(req.session.id !== undefined ? `logged in as ${req.session.user.displayName}` : "Logged Out") 
+    res.send(req.session.user !== undefined ? `logged in as ${req.session.user.displayName}` : "Logged Out") 
 })
 
 app.get("/github/callback",passport.authenticate("github",{
