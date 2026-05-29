@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {validate, userValidationRules} from './validator.js'
+import {validate, userValidationRules} from '../middleware/validator.js'
 import {
   getAllUsers,
   getOneUser,

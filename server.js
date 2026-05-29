@@ -3,13 +3,24 @@ import cors from 'cors'
 import 'dotenv/config'
 import {router} from './routes/index.js'
 import {ConnectDatabase,closeDatabase} from './data/db.js'
+import passport from 'passport'
+import session from 'express-session'
+import githubPassport from 'passport-github2'
+
+const GitHubStrategy = githubPassport.Strategy
 
 const app = express()
-let port = process.env.PORT || 8000
+let port = process.env.PORT || 8080
 
 app.use(express.json())
 app.use(cors())
-
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave:false,
+    saveUninitialized:true
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(router)
 
@@ -24,6 +35,36 @@ app.use((err,req,res,next)=>{
     const status = err.status || 500
     res.status(status).json({error:err.message})
 })
+
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret:process.env.GITHUB_CLIENT_SECRET,
+    callbackURL:process.env.CALL_BACK_URL
+},
+function(accessToken,refreshToken,profile,done){
+    return done(null,profile)
+}
+))
+
+passport.serializeUser((user,done)=>{
+    done(null,user)
+})
+passport.deserializeUser(()=>{
+    done(null,user)   
+})
+
+app.get("/",(req,res) => {
+    res.send(req.session.id !== undefined ? `logged in as ${req.session.user.displayName}` : "Logged Out") 
+})
+
+app.get("/github/callback",passport.authenticate("github",{
+    failureRedirect: `/api-docs`,session:false
+    }),
+    (req,res)=>{
+        req.session.user = req.user;
+        res.redirect("/")
+    }
+)
 
 ConnectDatabase().then(()=>{
     app.listen(port,()=>{
