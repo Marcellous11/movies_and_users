@@ -14,6 +14,7 @@ let port = process.env.PORT || 8080
 
 app.use(express.json())
 app.use(cors())
+app.set('trust proxy', 1); 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave:false,
@@ -24,17 +25,6 @@ app.use(passport.session())
 
 app.use(router)
 
-app.use((req,res,next)=>{
-    const error = new Error("Page not found")
-    error.status = 404
-    next(error) 
-})
-
-app.use((err,req,res,next)=>{
-    console.log(err)
-    const status = err.status || 500
-    res.status(status).json({error:err.message})
-})
 
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
@@ -59,12 +49,24 @@ app.get("/",(req,res) => {
 
 app.get("/github/callback",passport.authenticate("github",{
     failureRedirect: `/api-docs`,session:false
-    }),
-    (req,res)=>{
-        req.session.user = req.user;
-        res.redirect("/")
-    }
+}),
+(req,res)=>{
+    req.session.user = req.user;
+    res.redirect("/")
+}
 )
+
+app.use((req,res,next)=>{
+    const error = new Error("Page not found")
+    error.status = 404
+    next(error) 
+})
+
+app.use((err,req,res,next)=>{
+    console.log(err)
+    const status = err.status || 500
+    res.status(status).json({error:err.message})
+})
 
 ConnectDatabase().then(()=>{
     app.listen(port,()=>{
